@@ -249,22 +249,9 @@ In this hands on lab, I will do the following:
 ## Security controls
 
 ### Prerequisite steps
-* Create a stack on CloudFormation using the prerequisites.yaml CloudFormation template. The template with create the following resources:
-  * An IAM role for the EC2 instances
-  * EC2 instance profile to define the IAM role that the EC2 instances should use
-  * IAM role for VPC Flowlogs
-  * An S3 bucket that will be used to test VPC Endpoints
+* Create a stack on CloudFormation using the prerequisites.yaml CloudFormation template. 
 
-  <img width="952" alt="1" src="https://github.com/user-attachments/assets/fd3b9d71-dc3b-4b6f-8cd8-e2d0165354e0" />
-
-* Create a stack on CloudFormation using the ### Prerequisite steps
-* Create a stack on CloudFormation using the prerequisites.yaml CloudFormation template. The template with create the following resources:
-  * An IAM role for the EC2 instances
-  * EC2 instance profile to define the IAM role that the EC2 instances should use
-  * IAM role for VPC Flowlogs
-  * An S3 bucket that will be used to test VPC Endpoints
-
-  <img width="952" alt="1" src="https://github.com/user-attachments/assets/fd3b9d71-dc3b-4b6f-8cd8-e2d0165354e0" />
+<img width="952" alt="1" src="https://github.com/user-attachments/assets/fd3b9d71-dc3b-4b6f-8cd8-e2d0165354e0" />
 
 * Create a stack on CloudFormation using the multi-vpc-create-all-vpcs-and-tgw template. The template will create the following resources:
   * Three VPCS
@@ -335,4 +322,130 @@ In this hands on lab, I will do the following:
 <img width="941" alt="16" src="https://github.com/user-attachments/assets/ad0fad19-e154-47f6-970d-9fef05d00694" />
 
 16. Clean up resources by deleting the MultiVPC and Prerequisites CloudFormation stacks
+
+## Connecting On-premises
+
+### Prerequisite steps
+* Create a stack on CloudFormation using the prequisites.yaml CloudFormation template. 
+
+<img width="952" alt="1" src="https://github.com/user-attachments/assets/fd3b9d71-dc3b-4b6f-8cd8-e2d0165354e0" />
+
+* Create a stack on CloudFormation using the multi-vpc-create-all-vpcs-and-tgw.yaml template.
+
+<img width="950" alt="2" src="https://github.com/user-attachments/assets/10fc882c-cc4d-4807-8dfa-ac7a73b8e87d" />
+
+* Create a stack on CloudFormation using the on-premises-create-on-premises.yaml template. This stack will create the following:
+ *  VPC that will act as the on-premises environment
+ *  Apublic and private subnet
+ *  Three EC2 instances for a Customer Gateway Server, DNS Server and Application Server
+
+I had a problem when I tried to deploy this stack, I hit the quota of the amount of VPCs that I can have in my account. I submitted a quota increase to AWS and my issue was quickly resolved.
+
+<img width="957" alt="3" src="https://github.com/user-attachments/assets/0d9c1ece-ddbf-4b5f-9bdf-277bcaf94e64" />
+
+<img width="956" alt="4" src="https://github.com/user-attachments/assets/dccb2b05-700d-4641-84af-ea0ec061c381" />
+
+1. Create a Transit Gateway VPN attachment
+
+<img width="957" alt="1" src="https://github.com/user-attachments/assets/6c9a5a62-e9b8-4686-99b8-7fc95a4acc73" />
+
+2. Download the configuration file of the VPN connection
+
+<img width="953" alt="4" src="https://github.com/user-attachments/assets/b3728a97-7ac3-4a5a-a577-19c65bda1f74" />
+
+3. Create a new Transit Gateway Route table for the VPN
+
+<img width="952" alt="5" src="https://github.com/user-attachments/assets/d5789c8e-ab7d-441f-94bb-a708ab265a3d" />
+
+4. Associate the VPN attachment to the new Transit Gateway Route table
+
+<img width="957" alt="6" src="https://github.com/user-attachments/assets/ce880bf6-6280-4eeb-bdc2-2bb4c7acea21" />
+
+5. Create propagtions for VPC A, VPC B and VPC C
+
+<img width="953" alt="7" src="https://github.com/user-attachments/assets/92cd056a-5915-4d6c-b9f5-0ba718e0fd68" />
+
+<img width="948" alt="8" src="https://github.com/user-attachments/assets/90398a01-969c-4bbc-844a-7b8d8de53518" />
+
+<img width="953" alt="9" src="https://github.com/user-attachments/assets/fab3a25b-99b8-44d6-869b-a6a458a4f3d6" />
+
+6. Update the Transit Gateway Route Tables with the On premises CIDR
+
+<img width="949" alt="10" src="https://github.com/user-attachments/assets/ea4488eb-cd2c-45f6-b6a6-b4c3aae4a8dc" />
+
+<img width="953" alt="11" src="https://github.com/user-attachments/assets/f3878507-f12c-4b23-b79b-94be246c3814" />
+
+7. Update VPC A, VPC B and VPC C Route tables with the On premises CIDR
+
+<img width="954" alt="12" src="https://github.com/user-attachments/assets/911ad1fc-6a09-49db-89ee-8b24130a1f85" />
+
+<img width="952" alt="13" src="https://github.com/user-attachments/assets/99bcd3e3-c135-4568-b96e-cbcf05cc1189" />
+
+<img width="959" alt="14" src="https://github.com/user-attachments/assets/4e150dcf-ba20-4bd5-aec3-223a0f21437f" />
+
+8. Update the customer gateway EC2 instance's security group
+
+<img width="953" alt="15" src="https://github.com/user-attachments/assets/a4cb32a8-5127-4665-9e37-aad66a8d2a37" />
+
+9. Configure OpenSWAN and bring up the tunnel. Now that ww have configured the simulated datacenter VPC and created the VPN connection to the Transit Gateway, we need to comfigure OpenSWAN on the Customer Gateway and bring up the tunnel
+
+<img width="956" alt="16" src="https://github.com/user-attachments/assets/5f4808ab-9032-41c3-90a2-ebe91df6f5ee" />
+
+10. Connect to the Customer Gateway EC2 Instance using session manager and ping the private IP address of the EC2 instance in the private subnet of VPC A
+
+<img width="479" alt="17" src="https://github.com/user-attachments/assets/ac284d42-dbd4-43b4-aaae-d878f0a5bd14" />
+
+11. On the Customer Gateway instance check which DNS server the host is using
+
+<img width="276" alt="18" src="https://github.com/user-attachments/assets/b90e4ff2-1be0-4d93-921f-99e4841df77b" />
+
+12. Test that the application server is up and running by using the curl command and the hostname, terminate the session when finished
+
+<img width="269" alt="19" src="https://github.com/user-attachments/assets/5e4d410f-905c-4c1a-977a-1582dd3c4c42" />
+
+13. Connect to the VPC A Private AZ! server instance using Session manager and test the connectivity to the on premises application server's using its private IP address
+
+<img width="421" alt="20" src="https://github.com/user-attachments/assets/3564a9d3-1353-4610-86b5-dbe76cde1bdc" />
+
+14. Test the application server using the curl command. The VPN connection is functioning correctly because the command returns "Hello, world" from the application server
+
+<img width="226" alt="21" src="https://github.com/user-attachments/assets/54f4130b-a0ab-432a-87ff-030a775f0763" />
+
+15. Verify that the EC2 instance can reach the on-premises DNS server by qurying it directly using the IP address and the dig command
+
+<img width="476" alt="22" src="https://github.com/user-attachments/assets/a1390605-869f-4dce-8c2e-bd389cee4831" />
+
+16. Test the application server by using the curl command and its hostname. This fails because the DNS has not been configured to allow the EC2 instances to resolve to names hosted on the DNS server. Terminate the session when finished.
+
+<img width="340" alt="23" src="https://github.com/user-attachments/assets/926b05f8-30bb-482d-acbb-8f7266b83125" />
+
+17. Configure a Route 53 Resolver Outbound Endpoint. Route 53 Resolver makes hybrid cloud easier for enterprise customers by enabling seamless DNS query resolutions across your entire hybrid cloud.
+
+<img width="955" alt="24" src="https://github.com/user-attachments/assets/1a71b27c-67c0-4ebb-b2e2-9656abc3df6c" />
+
+18. Create a Route 53 Resolver rule for example.corp
+
+<img width="959" alt="25" src="https://github.com/user-attachments/assets/02d681c8-9a0e-4b4f-b837-8a92a75c73ee" />
+
+19. Connect to the VPC B Private AZ1 Server EC2 instance usinf session manager and check the setting of the DNS server on the instance
+
+<img width="525" alt="26" src="https://github.com/user-attachments/assets/91925cc5-fdac-4e2a-aa4a-773f5e738b0f" />
+
+20. Check that the hostname for myapp.example.corp resolves to an IP address
+
+<img width="254" alt="27" src="https://github.com/user-attachments/assets/1ff052dd-8131-4a42-aae7-6593ecdf9b8b" />
+
+21. Use the curl command to query the on-premises application server by its hostmname
+
+<img width="257" alt="28" src="https://github.com/user-attachments/assets/fd4e68b5-0421-420f-8629-1f43605c1707" />
+
+22. Clean up resources
+
+22.1 Delete the Site-to-Site VPN
+
+22.2 Delete the on-premises VPC cloudformation stack
+
+22.3 Delete the Route53 resolver endpoints
+
+22.4 Delete the MultiVPC and Prerequisites CloudFormation stacks
 
