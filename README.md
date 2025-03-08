@@ -15,7 +15,7 @@ In the hands on lab, I will be doing the following:
 * Create a stack on CloudFormation using the prerequisites.yaml CloudFormation template. The template with create the following resources:
   * An IAM role for the EC2 instances
   * EC2 instance profile to define the IAM role that the EC2 instances should use
-  * IAM role for VPC Flowlogs
+  * IAM role for VPC Flow logs
   * An S3 bucket that will be used to test VPC Endpoints
 
 1. Create a VPC 
@@ -84,7 +84,7 @@ In the hands on lab, I will be doing the following:
 
 <img width="954" alt="21" src="https://github.com/user-attachments/assets/a6d6a49a-149d-479b-baac-4e71093a0bf0" />
 
-14. Create a gateway enpoint for S3. Gateway endpoints only support S3 and DynamoDB, they reach these services through a gateway from the VPC.
+14. Create a gateway endpoint for S3. Gateway endpoints only support S3 and DynamoDB, they reach these services through a gateway from the VPC.
 
 <img width="954" alt="22" src="https://github.com/user-attachments/assets/e2c1d0f8-bc35-4b37-9eb2-3abb3081a854" />
 
@@ -125,11 +125,7 @@ In this hands on lab, I will do the following:
 * Create a Transit Gateway, attach VPCs and configure routing with the Transit Gateway route tables
 
 ### Prerequisite steps
-* Create a stack on CloudFormation using the prerequisites.yaml CloudFormation template. The template with create the following resources:
-  * An IAM role for the EC2 instances
-  * EC2 instance profile to define the IAM role that the EC2 instances should use
-  * IAM role for VPC Flowlogs
-  * An S3 bucket that will be used to test VPC Endpoints
+* Create a stack on CloudFormation using the prerequisites.yaml CloudFormation template.
 
   <img width="952" alt="1" src="https://github.com/user-attachments/assets/fd3b9d71-dc3b-4b6f-8cd8-e2d0165354e0" />
 
@@ -180,7 +176,7 @@ In this hands on lab, I will do the following:
 
 10. Delete the VPC peering connections amd delete the related route table entries
 
-11. Create a transit gateway. AWS Transit Gateway connects your VPCs and on-premises networks through a contral hub.
+11. Create a transit gateway. AWS Transit Gateway connects your VPCs and on-premises networks through a central hub
 
 <img width="959" alt="1" src="https://github.com/user-attachments/assets/ef304d95-5ee4-49f8-ae54-691fe9a7f3dd" />
 
@@ -244,9 +240,18 @@ In this hands on lab, I will do the following:
 
 22.1 Delete the transit gateway attachments and then delete the transit gateway
 
-22.2 Delete the MultiVPC and Prerequsite cloudformation stacks
+22.2 Delete the MultiVPC and Prerequisite cloudformation stacks
 
 ## Security controls
+Security in VPCs can be managed using the following:
+* Network ACLs: stateless access controls that you configure at a subnet level, to allow or block a CIDR block on a particular port or range of ports. Network ACL rules are a numbered list and are evaluated top down, with a DENY ALL at the end. Both in inbound and outbound traffic can be controlled with these rules.
+* Security groups: virtual, stateful firewall attached to an instance or a network interface. Both inbound and outbound rules can be defined to allow specific protocols, ports and source/destination CIDR. A DENY is not possible with security groups.
+* Endpoint policies are IAM policies attached to VPC endpoints to restrict/grant permission to the service's API calls.
+
+In the hands on lab, I will be doing the following:
+* Modify the Network ACL associated with the workload subnets in VPC A to only ICMP traffic from VPC B's CIDR
+* Modify the security group attached to VPC A private EC2 instance to allow only ICMP traffic inbound from VPC C's CIDR only
+* Modify the S3 endpoint policy to limit read only access to S3 buckets within the VPC
 
 ### Prerequisite steps
 * Create a stack on CloudFormation using the prerequisites.yaml CloudFormation template. 
@@ -265,11 +270,11 @@ In this hands on lab, I will do the following:
  
 <img width="952" alt="3" src="https://github.com/user-attachments/assets/0339282c-27de-411b-aa45-0c161844aea1" />
 
-2. Connect to the EC2 instance in VPC B using EC2 session manager and verify reachablity to the EC2 instance in VPC A by pinging the instance using its IP address, the traffic will flow through successfully  because we modified the NACL. Terminate the session when finished.
+2. Connect to the EC2 instance in VPC B using EC2 session manager and verify reachability to the EC2 instance in VPC A by pinging the instance using its IP address, the traffic will flow through successfully because we modified the NACL. Terminate the session when finished.
 
 <img width="427" alt="4" src="https://github.com/user-attachments/assets/d7dc1f36-b937-4725-a78b-1a771d138dac" />
 
-3. Connect to the EC2 instance in VPC C using EC2 session manager and verify reachablity to the EC2 instance in VPC A by pinging the instance using its IP address, the traffic will not flow through because the NACL in VPC A is denying all ICMP traffic that does not come from VPC B. 
+3. Connect to the EC2 instance in VPC C using EC2 session manager and verify reachability to the EC2 instance in VPC A by pinging the instance using its IP address, the traffic will not flow through because the NACL in VPC A is denying all ICMP traffic that does not come from VPC B. 
 
 <img width="428" alt="5" src="https://github.com/user-attachments/assets/ea5b291a-455c-4133-94c3-ff250a5c6747" />
 
@@ -281,11 +286,11 @@ In this hands on lab, I will do the following:
 
 <img width="958" alt="7" src="https://github.com/user-attachments/assets/332fb90c-27c3-45c3-af74-ffb795706dcb" />
 
-6. Connect to the EC2 instance in VPC A using EC2 session manager and verify reachablity to the EC2 instance in VPC B by pinging the instance using its IP address
+6. Connect to the EC2 instance in VPC A using EC2 session manager and verify reachability to the EC2 instance in VPC B by pinging the instance using its IP address
 
 <img width="428" alt="5" src="https://github.com/user-attachments/assets/ce57a353-a6af-4808-82c6-7bf6ed429144" />
 
-7. Connect to the EC2 instance in VPC C using EC2 session manager and verify reachablity to the EC2 instance in VPC A by pinging the instance using its IP address, traffic will flow through because the security group on the EC2 instance in VPC A is allowing ICMP traffic from VPC C's CIDR range. Terminate the session when finished.
+7. Connect to the EC2 instance in VPC C using EC2 session manager and verify reachability to the EC2 instance in VPC A by pinging the instance using its IP address, traffic will flow through because the security group on the EC2 instance in VPC A is allowing ICMP traffic from VPC C's CIDR range. Terminate the session when finished.
 
 <img width="419" alt="8" src="https://github.com/user-attachments/assets/5cbd00d2-564e-4280-ae10-023e52955a29" />
 
@@ -309,7 +314,7 @@ In this hands on lab, I will do the following:
 
 <img width="535" alt="13" src="https://github.com/user-attachments/assets/6f7ebc85-33eb-4798-8d1a-f7ee9ae04360" />
 
-13. Confirm that the bucket constains the file using the following command
+13. Confirm that the bucket contains the file using the following command
 
 <img width="422" alt="14" src="https://github.com/user-attachments/assets/c64ba4b4-6b92-4ecd-939f-8e944b5a32fd" />
 
@@ -317,7 +322,7 @@ In this hands on lab, I will do the following:
 
 <img width="957" alt="15" src="https://github.com/user-attachments/assets/02fbbdaa-36a4-467e-8532-b5037a3f5281" />
 
-15. Trying to upload the test file again will result will result in an Access denied error. This is because the Endpoint policy allows only Get* and List* actions, effectly making the S3 bucket read only
+15. Trying to upload the test file again will result will result in an Access denied error. This is because the Endpoint policy allows only Get* and List* actions, effectively making the S3 bucket read only
 
 <img width="941" alt="16" src="https://github.com/user-attachments/assets/ad0fad19-e154-47f6-970d-9fef05d00694" />
 
@@ -325,8 +330,16 @@ In this hands on lab, I will do the following:
 
 ## Connecting On-premises
 
+Amazon VPC provides multiple options to integrate existing data center networks with your AWS VPCs, including AWS Managed Site-to-Site (IPsec) VPNs and Direct Connect connections. 
+
+In the hands on lab, I will be doing the following:
+* Deploy a VPC containing a simulated data center environment, with DNS server and a simple web application
+* Establish VPN connectivity between the simulated data center and the AWS environment
+* Set up DNS resolution between the AWS environment and simulated data center
+* Test connectivity from the AWS environment to the simulated data center
+
 ### Prerequisite steps
-* Create a stack on CloudFormation using the prequisites.yaml CloudFormation template. 
+* Create a stack on CloudFormation using the prerequisites.yaml CloudFormation template. 
 
 <img width="952" alt="1" src="https://github.com/user-attachments/assets/fd3b9d71-dc3b-4b6f-8cd8-e2d0165354e0" />
 
@@ -336,7 +349,7 @@ In this hands on lab, I will do the following:
 
 * Create a stack on CloudFormation using the on-premises-create-on-premises.yaml template. This stack will create the following:
  *  VPC that will act as the on-premises environment
- *  Apublic and private subnet
+ *  A public and private subnet
  *  Three EC2 instances for a Customer Gateway Server, DNS Server and Application Server
 
 I had a problem when I tried to deploy this stack, I hit the quota of the amount of VPCs that I can have in my account. I submitted a quota increase to AWS and my issue was quickly resolved.
@@ -361,7 +374,7 @@ I had a problem when I tried to deploy this stack, I hit the quota of the amount
 
 <img width="957" alt="6" src="https://github.com/user-attachments/assets/ce880bf6-6280-4eeb-bdc2-2bb4c7acea21" />
 
-5. Create propagtions for VPC A, VPC B and VPC C
+5. Create propagations for VPC A, VPC B and VPC C
 
 <img width="953" alt="7" src="https://github.com/user-attachments/assets/92cd056a-5915-4d6c-b9f5-0ba718e0fd68" />
 
@@ -387,7 +400,7 @@ I had a problem when I tried to deploy this stack, I hit the quota of the amount
 
 <img width="953" alt="15" src="https://github.com/user-attachments/assets/a4cb32a8-5127-4665-9e37-aad66a8d2a37" />
 
-9. Configure OpenSWAN and bring up the tunnel. Now that ww have configured the simulated datacenter VPC and created the VPN connection to the Transit Gateway, we need to comfigure OpenSWAN on the Customer Gateway and bring up the tunnel
+9. Configure OpenSWAN and bring up the tunnel. Now that ww have configured the simulated datacenter VPC and created the VPN connection to the Transit Gateway, we need to configure OpenSWAN on the Customer Gateway and bring up the tunnel
 
 <img width="956" alt="16" src="https://github.com/user-attachments/assets/5f4808ab-9032-41c3-90a2-ebe91df6f5ee" />
 
@@ -411,7 +424,7 @@ I had a problem when I tried to deploy this stack, I hit the quota of the amount
 
 <img width="226" alt="21" src="https://github.com/user-attachments/assets/54f4130b-a0ab-432a-87ff-030a775f0763" />
 
-15. Verify that the EC2 instance can reach the on-premises DNS server by qurying it directly using the IP address and the dig command
+15. Verify that the EC2 instance can reach the on-premises DNS server by querying it directly using the IP address and the dig command
 
 <img width="476" alt="22" src="https://github.com/user-attachments/assets/a1390605-869f-4dce-8c2e-bd389cee4831" />
 
@@ -427,7 +440,7 @@ I had a problem when I tried to deploy this stack, I hit the quota of the amount
 
 <img width="959" alt="25" src="https://github.com/user-attachments/assets/02d681c8-9a0e-4b4f-b837-8a92a75c73ee" />
 
-19. Connect to the VPC B Private AZ1 Server EC2 instance usinf session manager and check the setting of the DNS server on the instance
+19. Connect to the VPC B Private AZ1 Server EC2 instance using session manager and check the setting of the DNS server on the instance
 
 <img width="525" alt="26" src="https://github.com/user-attachments/assets/91925cc5-fdac-4e2a-aa4a-773f5e738b0f" />
 
@@ -435,7 +448,7 @@ I had a problem when I tried to deploy this stack, I hit the quota of the amount
 
 <img width="254" alt="27" src="https://github.com/user-attachments/assets/1ff052dd-8131-4a42-aae7-6593ecdf9b8b" />
 
-21. Use the curl command to query the on-premises application server by its hostmname
+21. Use the curl command to query the on-premises application server by its hostname
 
 <img width="257" alt="28" src="https://github.com/user-attachments/assets/fd4e68b5-0421-420f-8629-1f43605c1707" />
 
@@ -449,3 +462,78 @@ I had a problem when I tried to deploy this stack, I hit the quota of the amount
 
 22.4 Delete the MultiVPC and Prerequisites CloudFormation stacks
 
+## Network Monitoring 
+Amazon CloudWatch is a metrics repository. AWS services send metrics into the repository, and then you retrieve statistics based on those metrics. VPC Flow Logs is a feature that enables you to capture information (meta data) about the IP traffic going to and from network interfaces in your VPC. 
+
+In the hands on lab, I will be doing the following:
+* Create a dashboard to view a set of metrics on one page and set up an alarm on a threshold breach
+* Set Up VPC Flow logs for VPC A
+* Generate some traffic on the EC2 instances in the VPC
+* View logs in CloudWatch
+
+### Prerequisite steps
+* Create a stack on CloudFormation using the prerequisites.yaml CloudFormation template. 
+
+<img width="952" alt="1" src="https://github.com/user-attachments/assets/fd3b9d71-dc3b-4b6f-8cd8-e2d0165354e0" />
+
+* Create a stack on CloudFormation using the multi-vpc-create-all-vpcs-and-tgw.yaml template.
+
+<img width="950" alt="2" src="https://github.com/user-attachments/assets/10fc882c-cc4d-4807-8dfa-ac7a73b8e87d" />
+
+1. Review automatic CloudWatch dashboards for Nat Gateways
+
+<img width="951" alt="1" src="https://github.com/user-attachments/assets/414d9381-db19-474c-9d16-e5e571d0ebc3" />
+
+2. Create a custom dashboard. The dashboard will have the following:
+* A graph of the Network In/Out statistics in bytes for the EC2 instances 
+* A widget of the NetworkPacketsOut and NetworkPacketsIn
+
+<img width="959" alt="3" src="https://github.com/user-attachments/assets/4da09f4d-0036-4cdd-b625-8a0840e685b6" />
+
+3. Create a CloudWatch alarm that monitors the amount of traffic received by an EC2 instance
+
+<img width="954" alt="4" src="https://github.com/user-attachments/assets/d04a5a06-9ec4-4b1a-9b7d-6fabc3c673ab" />
+
+4. Create an SNS Topic. Subscribe to the SNS topic to receive an email notification if an alarm threshold is breached.
+
+<img width="687" alt="5" src="https://github.com/user-attachments/assets/7cdea212-48a1-485b-97f7-82b9830ef159" />
+
+<img width="431" alt="6" src="https://github.com/user-attachments/assets/c8c7fdc5-327e-4d2e-b571-7ad4aece5efb" />
+
+5. Create a CloudWatch Log Group
+
+<img width="958" alt="1" src="https://github.com/user-attachments/assets/f5d5e98f-5193-4e27-98ba-f24d298fe28d" />
+
+6. Create a VPC Flow log
+
+<img width="959" alt="2" src="https://github.com/user-attachments/assets/809a12c3-377d-4405-81ed-1b3f7e63c0da" />
+
+7. Connect to the VPC B Private EC2 server using Session Manager and install and run iperf3 server
+
+<img width="952" alt="3" src="https://github.com/user-attachments/assets/e40ec095-9ec7-4d93-9683-353d1d3a5455" />
+
+8. Connect to the VPC A Private EC2 server using Session Manager. Install iperf and set up a TCP transfer with 2 parallel streams for 30 seconds to the EC2 instance in VPC B. When iperf is completed, terminate the Session manager session. Terminate the session for the other instance as well. 
+
+<img width="689" alt="4" src="https://github.com/user-attachments/assets/183bc197-caae-401d-b97f-065c1fe58689" />
+
+9. View the VPC Flow logs for the EC2 Instance in VPC A
+
+<img width="950" alt="5" src="https://github.com/user-attachments/assets/d358211a-fdc6-4455-97a7-71ec966c16f5" />
+
+10. Query the VPC Flow Logs using CloudWatch Logs Insights. Here we are querying the top 10 byte transfers by source and destination IP addresses
+
+<img width="956" alt="6" src="https://github.com/user-attachments/assets/8ffc208b-a766-4746-8bda-80b1f5dfc5a8" />
+
+11. Generating traffic to the Instance in VPC B triggered the CloudWatch. Here is the email that we received from the SNS topic notifying us about the alarm breach.
+
+<img width="712" alt="7" src="https://github.com/user-attachments/assets/2ae06d8d-db24-473e-8c95-a135b87ed659" />
+
+12. Clean Up resources
+
+12.1 Delete CloudWatch Alarm
+
+12.2 Delete the FlowLog CloudWatch Log Group
+
+12.3 Delete the CloudWatch Dashboard
+
+12.4 Delete the MultiVPC and Prerequisites CloudFormation stacks
