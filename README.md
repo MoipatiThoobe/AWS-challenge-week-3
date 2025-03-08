@@ -1,7 +1,7 @@
 # AWS-challenge-week-3
 Week 3 of the 12 weeks of AWS challenge
 
-The third week of the challenge focused of Networking, in AWS networking in done using Amazon Virtual Private Cloud (Amazon VPC). Amazon VPC lets you provision a logically isolated section of the AWS Cloud where you can launch AWS resources in a virtual network that you define. You have complete control over your networking environment, including selection of your own IP address range, creation of subnets and configuration of route tables and network gateways. 
+The third week of the challenge focused of Networking. In AWS, networking is done using Amazon Virtual Private Cloud (Amazon VPC). Amazon VPC lets you provision a logically isolated section of the AWS Cloud where you can launch AWS resources in a virtual network that you define. You have complete control over your networking environment, including selection of your own IP address range, creation of subnets and configuration of route tables and network gateways. 
 
 ## VPC fundamentals
 Amazon VPC enables you to launch AWS resources into a virtual network that you have defined.
@@ -22,7 +22,7 @@ In the hands on lab, I will be doing the following:
 
 <img width="954" alt="1" src="https://github.com/user-attachments/assets/c132d68b-7d9b-4440-b664-386f7c4093ce" />
 
-2. enable **DNS resolution** and enable **DNS hostnames**
+2. Enable **DNS resolution** and Enable **DNS hostnames**
 
 <img width="950" alt="2" src="https://github.com/user-attachments/assets/b1e7eb7b-4939-4200-8be0-b8a857ce790b" />
 
@@ -48,7 +48,7 @@ In the hands on lab, I will be doing the following:
 
 <img width="951" alt="11" src="https://github.com/user-attachments/assets/f9d17aa6-0c16-4554-8e64-bd522f0ff87a" />
 
-6. Create a public and private route table for the subnets. Each subnet inside of the VPC must be associated with a route table, which controls the routing for the subnet (subnet route table).
+6. Create public and private route table for the subnets. Each subnet inside of the VPC must be associated with a route table, which controls the routing for the subnet (subnet route table).
 
 <img width="952" alt="12" src="https://github.com/user-attachments/assets/6438d65f-d3ba-447c-b553-bae7c189543f" />
 
@@ -60,7 +60,7 @@ In the hands on lab, I will be doing the following:
 
 <img width="956" alt="15" src="https://github.com/user-attachments/assets/67ad9c05-33f0-4fee-b67e-edd3b3dd04db" />
 
-8. Deploy an Internet Gateway (IGW), an Internet Gateway establishes outside connectivity for EC2 instances that will be deployed inside of the VPC.
+8. Deploy an Internet Gateway (IGW). An Internet Gateway establishes outside connectivity for EC2 instances that will be deployed inside of the VPC.
 
 <img width="957" alt="16" src="https://github.com/user-attachments/assets/805b1fa1-e8fd-49e4-b6bb-744a79bec08f" />
 
@@ -76,7 +76,7 @@ In the hands on lab, I will be doing the following:
 
 <img width="954" alt="19" src="https://github.com/user-attachments/assets/c5c93e43-fe3e-42d3-8845-d5d2e2635aa6" />
 
-12. Now that there is a NAT gateway we need to update the route tables for the private subnets to create a route it
+12. Now that there is a NAT gateway we need to update the route tables for the private subnets to create a route to it
 
 <img width="958" alt="20" src="https://github.com/user-attachments/assets/d3df1ea2-bc02-42e8-a960-c7ea2f82f2c9" />
 
@@ -118,11 +118,13 @@ In the hands on lab, I will be doing the following:
 
 ## Multiple VPCs
 
-A VPC peering connection is a networking connection two VPCs that enables you to route traffic between them using IPV4 addresses or IPV6 addresses. AWS Transit Gateway is a service that enables you to connect VPCs and on=premises networks to a single gateway. 
+A VPC peering connection is a networking connection between two VPCs that enables you to route traffic between them using IPV4 addresses or IPV6 addresses. AWS Transit Gateway is a service that enables you to connect VPCs and on=premises networks to a single gateway. 
 
 In this hands on lab, I will do the following: 
 * Peer multiple VPcs
-* Create a Transit Gateway, attach VPCs and configure routing with the Transit Gateway route tables
+* Create a Transit Gateway,
+* Attach VPCs to the Transit Gateway
+* Configure routing with the Transit Gateway route tables
 
 ### Prerequisite steps
 * Create a stack on CloudFormation using the prerequisites.yaml CloudFormation template.
@@ -136,7 +138,7 @@ In this hands on lab, I will do the following:
   
   <img width="956" alt="2" src="https://github.com/user-attachments/assets/0d5a3c16-3e70-4cfd-9702-3f78f0240ef1" />
 
-1. Create a peering connection between VPC A and VPC B. A VPC peering connection is a networking connection between two VPCs that enables you to route traffic between them using private IPV4 or private IPV6 addresses.
+1. Create a peering connection between VPC A and VPC B
 
 <img width="949" alt="3" src="https://github.com/user-attachments/assets/50234303-a87c-415b-ad49-292828b15759" />
 
@@ -162,7 +164,7 @@ In this hands on lab, I will do the following:
 
 <img width="956" alt="9" src="https://github.com/user-attachments/assets/45e98bde-96c1-4f99-8a6a-3b5b9222a49e" />
 
-7. Connect to the VPC A AZ1 Server EC2 instance using Session manager and ping the instances in VPC B and VPC C using their private addresses. We are receiving results which confirms that we have peered and routed correctly. Terminate the session manager connection when finished.
+7. Connect to the VPC A AZ1 Server EC2 instance using Session manager and ping the instances in VPC B and VPC C using their private IP addresses. The ping will succeed and traffic will flow through. 
 
 <img width="422" alt="10" src="https://github.com/user-attachments/assets/3f49d054-774c-4a3b-ad33-71727d11bce8" />
 
@@ -170,7 +172,7 @@ In this hands on lab, I will do the following:
 
 <img width="409" alt="11" src="https://github.com/user-attachments/assets/0c0cb6e7-5fcd-4a71-8109-9d7b06573148" />
 
-9. We do not get any data when we try to ping the instance in VPC C because there is no peering connection between the VPC B and VPC C
+9. The ping is not successful because there is no peering connection between the VPC B and VPC C
 
 <img width="431" alt="12" src="https://github.com/user-attachments/assets/542c632d-1cf1-46fe-9f33-bc4e6e7d172d" />
 
@@ -416,7 +418,7 @@ I had a problem when I tried to deploy this stack, I hit the quota of the amount
 
 <img width="269" alt="19" src="https://github.com/user-attachments/assets/5e4d410f-905c-4c1a-977a-1582dd3c4c42" />
 
-13. Connect to the VPC A Private AZ! server instance using Session manager and test the connectivity to the on premises application server's using its private IP address
+13. Connect to the VPC A Private AZ server instance using Session manager and test the connectivity to the on premises application server's using its private IP address
 
 <img width="421" alt="20" src="https://github.com/user-attachments/assets/3564a9d3-1353-4610-86b5-dbe76cde1bdc" />
 
